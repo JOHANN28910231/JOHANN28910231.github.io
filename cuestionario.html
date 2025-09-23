@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#fafafa">
+  <title>Calculadora</title>
+</head>
+<body>
+<header>
+  <span class="text">Proyecto Web</span>
+  <nav>
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="autobiografia.html">Quién soy</a></li>
+      <li><a href="cuestionario.html">Cuestionario</a></li>
+      <li><a href="conversor.html"> Conversor</a></li>
+      <li><a href="calculadora.html"> Calculadora</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="contacto.html">Contacto</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <h1>Cuestionario Interactivo</h1>
+  <form id="quiz-form">
+    <fieldset>
+      <legend>1. ¿Cuál es la capital de México?</legend>
+      <input type="radio" name="q1" value="CDMX"> CDMX
+      <input type="radio" name="q1" value="Guadalajara"> Guadalajara
+    </fieldset>
+
+    <fieldset>
+      <legend>2. Selecciona los lenguajes de programación</legend>
+      <input type="checkbox" name="q2" value="JavaScript"> JavaScript
+      <input type="checkbox" name="q2" value="Python"> Python
+      <input type="checkbox" name="q2" value="HTML"> HTML
+    </fieldset>
+
+    <fieldset>
+      <legend>3. Escribe un lenguaje que te gustaría aprender</legend>
+      <input type="text" name="q3" required>
+    </fieldset>
+
+    <fieldset>
+      <legend>4. Deja un comentario</legend>
+      <textarea name="q4" rows="3" required></textarea>
+    </fieldset>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <p id="quiz-result"></p>
+</main>
+
+
+
+
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,265 @@
+
+html {
+  color: #222;
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+form{
+  display: flex;
+  padding: 5%;
+  margin: auto;
+  gap: 3%;
+}
+
+body{
+  background-color: #f8f9fa;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 1.5em;
+  color: black;
+}
+
+header{
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  padding: 15px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+  display: flex;
+  justify-content: space-between; /* manda los links a la derecha y el texto hacia la izq*/
+  align-items: center;
+}
+
+.conversorMonedas{
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  color: black;
+}
+
+#boton-convertir{
+  background-color: darkblue;
+  padding: 1rem 2rem; /* Ajusta el tamaño del botón */
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: white;
+}
+
+.contenedor-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+#boton-convertir:hover{
+  background-color: darkgrey ;
+
+  transform: scale(1.1);
+
+}
+
+header nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  gap: 40px;
+}
+
+header nav ul li {
+  display: inline-block;
+}
+
+header nav ul li a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 30px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+/* Efecto al pasar el mouse */
+header nav ul li a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffeb3b;
+  transform: translateY(-2px);
+}
+
+/* Enlace activo (marcar la página actual) */
+header nav ul li a.active {
+  color: #ffeb3b;
+  border-bottom: 2px solid #ffeb3b;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+::-moz-selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
+
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+textarea {
+  resize: vertical;
+}
+
+
+.hidden,
+[hidden] {
+  display: none !important;
+}
+
+p{
+  color: black;
+}
+
+
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+  /* 1 */
+}
+
+
+
+.visually-hidden.focusable:active,
+.visually-hidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  white-space: inherit;
+  width: auto;
+}
+
+
+.invisible {
+  visibility: hidden;
+}
+
+
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  display: table;
+}
+
+.clearfix::after {
+  clear: both;
+}
+
+
+/*Ajustes para dispositivos de alta resolución*/
+@media print,
+  (-webkit-min-device-pixel-ratio: 1.25),
+  (min-resolution: 1.25dppx),
+  (min-resolution: 120dpi) {
+  /* Style adjustments for high resolution devices */
+}
+
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+
+
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  pre {
+    white-space: pre-wrap !important;
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+
+
+
