@@ -1,4 +1,4 @@
-// === Mostrar fecha, día y hora ===
+// Mostrar fecha, día y hora
 function actualizarFecha() {
   const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const ahora = new Date();
@@ -12,7 +12,7 @@ function actualizarFecha() {
 }
 setInterval(actualizarFecha, 1000); // Actualiza cada segundo
 
-// === Cookies creativas ===
+// Sección de cookies
 const cookieSeccion = document.getElementById("cookieSeccion");
 const inputNombre = document.getElementById("nombreUsuarioInput");
 const btnAceptar = document.getElementById("aceptarCookie");
@@ -34,10 +34,27 @@ function getCookie(nombre) {
 }
 
 window.onload = function () {
-  let usuario = getCookie("usuarioNombre");
-  if (usuario && document.getElementById("fecha-actual")) {
-    document.getElementById("fecha-actual").insertAdjacentHTML("afterend", `<p>👋 Bienvenido de nuevo, <b>${usuario}</b>!</p>`);
+  const usuario = getCookie("usuarioNombre");
+  const fechaElement = document.getElementById("fecha-actual");
+
+  console.log("Cookie encontrada:", usuario); // DEBUG
+
+  if (usuario && fechaElement) {
+    // ✅ CAMBIO: Asegurar que siempre se muestre el saludo al recargar
+    const mensajeSaludo = document.createElement("p");
+    mensajeSaludo.innerHTML = `👋 Bienvenido de nuevo, <b>${usuario}</b>!`;
+    mensajeSaludo.id = "mensajeSaludo";
+
+    // Evitar duplicados si ya existe
+    if (!document.getElementById("mensajeSaludo")) {
+      fechaElement.insertAdjacentElement("afterend", mensajeSaludo);
+    }
+
+    // Ocultar ventana de cookies
+    if (cookieSeccion) cookieSeccion.style.display = "none";
+
   } else if (cookieSeccion) {
+    // Mostrar ventana si no hay cookie
     cookieSeccion.style.display = "flex";
   }
 };
@@ -45,15 +62,25 @@ window.onload = function () {
 if (btnAceptar) {
   btnAceptar.addEventListener("click", () => {
     const nombre = inputNombre.value.trim();
+
     if (nombre) {
       setCookie("usuarioNombre", nombre, 7); // Dura 7 días
+
+      // ✅ CAMBIO: Mostrar saludo dinámicamente sin recargar
+      const fechaElement = document.getElementById("fecha-actual");
+      if (fechaElement) {
+        const mensajeSaludo = document.createElement("p");
+        mensajeSaludo.innerHTML = `👋 Bienvenido, <b>${nombre}</b>!`;
+        mensajeSaludo.id = "mensajeSaludo";
+        fechaElement.insertAdjacentElement("afterend", mensajeSaludo);
+      }
+
       cookieSeccion.style.display = "none";
-      location.reload(); // Recarga para mostrar el saludo
     }
   });
 }
 
-// === Validación de formulario de contacto ===
+// Validación de formulario de contacto
 document.addEventListener("DOMContentLoaded", () => {
   const formContacto = document.querySelector("form#contacto-form");
   if (formContacto) {
@@ -77,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// === Validación del cuestionario ===
+// Validación del cuestionario
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("quiz-form");
   const resultado = document.getElementById("quiz-result");
