@@ -40,32 +40,30 @@
 <main>
   <h1>Cuestionario Interactivo</h1>
   <form id="quiz-form">
-    <fieldset>
-      <legend>1. ¿Cuál es la capital de México?</legend>
-      <input type="radio" name="q1" value="CDMX"> CDMX
-      <input type="radio" name="q1" value="Guadalajara"> Guadalajara
-    </fieldset>
+    <div>
+      <p>1. ¿Cuál es la capital de México?</p>
+      <label><input type="radio" name="q1" value="a"> Monterrey</label><br>
+      <label><input type="radio" name="q1" value="b"> Ciudad de México</label><br>
+      <label><input type="radio" name="q1" value="c"> Guadalajara</label>
+    </div>
 
-    <fieldset>
-      <legend>2. Selecciona los lenguajes de programación</legend>
-      <input type="checkbox" name="q2" value="JavaScript"> JavaScript
-      <input type="checkbox" name="q2" value="Python"> Python
-      <input type="checkbox" name="q2" value="HTML"> HTML
-    </fieldset>
+    <div>
+      <p>2. ¿Cuánto es 5 × 5?</p>
+      <label><input type="radio" name="q2" value="a"> 20</label><br>
+      <label><input type="radio" name="q2" value="b"> 25</label><br>
+      <label><input type="radio" name="q2" value="c"> 30</label>
+    </div>
 
-    <fieldset>
-      <legend>3. Escribe un lenguaje que te gustaría aprender</legend>
-      <input type="text" name="q3" required>
-    </fieldset>
+    <div>
+      <p>3. ¿Qué color resulta de mezclar azul y amarillo?</p>
+      <label><input type="radio" name="q3" value="a"> Verde</label><br>
+      <label><input type="radio" name="q3" value="b"> Naranja</label><br>
+      <label><input type="radio" name="q3" value="c"> Morado</label>
+    </div>
 
-    <fieldset>
-      <legend>4. Deja un comentario</legend>
-      <textarea name="q4" rows="3" required></textarea>
-    </fieldset>
-
-    <button type="submit">Enviar</button>
+    <button type="submit">Enviar respuestas</button>
   </form>
-
+  <br>
   <p id="quiz-result"></p>
 </main>
 

@@ -1,203 +1,119 @@
-// Mostrar la fecha actual
-function formatearFecha(fecha) {
-    const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-    const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+// === Mostrar fecha, día y hora ===
+function actualizarFecha() {
+  const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const ahora = new Date();
+  const fechaTexto = ahora.toLocaleDateString('es-ES', opciones);
+  const horaTexto = ahora.toLocaleTimeString('es-ES');
+  const fechaElement = document.getElementById("fecha-actual");
 
-    let horas = fecha.getHours();
-    const minutos = fecha.getMinutes().toString().padStart(2, '0'); // asegura dos dígitos
-    const segundos = fecha.getSeconds().toString().padStart(2, '0'); // asegura dos dígitos
-    const ampm = horas >= 12 ? 'p.m' : 'a.m';
-
-    // Convertir de 24 horas a 12 horas
-    horas = horas % 12;
-    horas = horas ? horas : 12;
-
-    return `${diasSemana[fecha.getDay()]} ${fecha.getDate()} de ${meses[fecha.getMonth()]} de ${fecha.getFullYear()} ${horas}:${minutos}:${segundos} ${ampm}`;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const fechaHoy = new Date();
-    document.getElementById('fecha-actual').textContent = formatearFecha(fechaHoy);
-
-    const fechaElemento = document.getElementById('fecha-actual');
-    function actualizarFecha(){
-        const fechaHoy = new Date();
-        fechaElemento.textContent = formatearFecha(fechaHoy);
-    }
-    //Mostrar inmediatamente la fecha
-    actualizarFecha();
-
-    // Actualizar cada segundo
-    setInterval(actualizarFecha, 1000);
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener("click", function(e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute("href")).scrollIntoView({
-                behavior: "smooth"
-            });
-        });
-    });
-
-    // Confirmación al enviar formulario
-    const form = document.querySelector("form");
-    if (form) {
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            alert("¡Gracias por tu mensaje! Me pondré en contacto contigo pronto.");
-            form.reset();
-        });
-    }
-});
-
-const display = document.getElementById('display');
-const buttons = document.querySelectorAll('.btn');
-
-let currentInput = '0';
-let resetNext = false;
-
-// --- FUNCIÓN PRINCIPAL ---
-function handleInput(action) {
-  if (action === 'clear') {
-    currentInput = '0';
-
-  } else if (action === 'delete') {
-    currentInput = currentInput.length > 1 ? currentInput.slice(0, -1) : '0';
-
-  } else if (action === '=') {
-    try {
-      currentInput = eval(currentInput).toString();
-    } catch {
-      currentInput = 'Error';
-    }
-    resetNext = true;
-
-  } else {
-    if (currentInput === '0' || resetNext) {
-      currentInput = action;
-      resetNext = false;
-    } else {
-      currentInput += action;
-    }
+  if (fechaElement) {
+    fechaElement.innerHTML = `📅 ${fechaTexto} - ⏰ ${horaTexto}`;
   }
+}
+setInterval(actualizarFecha, 1000); // Actualiza cada segundo
 
-  display.textContent = currentInput;
+// === Cookies creativas ===
+const cookieSeccion = document.getElementById("cookieSeccion");
+const inputNombre = document.getElementById("nombreUsuarioInput");
+const btnAceptar = document.getElementById("aceptarCookie");
+
+function setCookie(nombre, valor, dias) {
+  let fecha = new Date();
+  fecha.setTime(fecha.getTime() + (dias * 24 * 60 * 60 * 1000));
+  document.cookie = `${nombre}=${valor}; expires=${fecha.toUTCString()}; path=/`;
 }
 
-// --- EVENTO BOTONES ---
-buttons.forEach(button => {
-  button.addEventListener('click', () => {
-    const action = button.getAttribute('data-action');
-    handleInput(action);
+function getCookie(nombre) {
+  let nameEQ = nombre + "=";
+  let ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i].trim();
+    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
+}
+
+window.onload = function () {
+  let usuario = getCookie("usuarioNombre");
+  if (usuario && document.getElementById("fecha-actual")) {
+    document.getElementById("fecha-actual").insertAdjacentHTML("afterend", `<p>👋 Bienvenido de nuevo, <b>${usuario}</b>!</p>`);
+  } else if (cookieSeccion) {
+    cookieSeccion.style.display = "flex";
+  }
+};
+
+if (btnAceptar) {
+  btnAceptar.addEventListener("click", () => {
+    const nombre = inputNombre.value.trim();
+    if (nombre) {
+      setCookie("usuarioNombre", nombre, 7); // Dura 7 días
+      cookieSeccion.style.display = "none";
+      location.reload(); // Recarga para mostrar el saludo
+    }
   });
-});
+}
 
-// --- EVENTO TECLADO ---
-document.addEventListener('keydown', (e) => {
-  const key = e.key;
+// === Validación de formulario de contacto ===
+document.addEventListener("DOMContentLoaded", () => {
+  const formContacto = document.querySelector("form#contacto-form");
+  if (formContacto) {
+    formContacto.addEventListener("submit", (e) => {
+      const nombre = document.getElementById("nombre").value.trim();
+      const correo = document.getElementById("correo").value.trim();
+      const mensaje = document.getElementById("mensaje").value.trim();
+      const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!isNaN(key) || key === '.') {
-    handleInput(key);
-  } else if (['+', '-', '*', '/'].includes(key)) {
-    handleInput(key);
-  } else if (key === 'Enter') {
-    e.preventDefault(); // Evita que recargue la página
-    handleInput('=');
-  } else if (key === 'Backspace') {
-    handleInput('delete');
-  } else if (key === 'Escape') {
-    handleInput('clear');
-  }
-});
-
-document.getElementById('quiz-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  document.getElementById('quiz-result').textContent = "¡Gracias por participar! Tus respuestas han sido registradas.";
-})
-
-// Validación de formulario de contacto
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.querySelector('form');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      const nombre = document.getElementById('nombre').value.trim();
-      const correo = document.getElementById('correo').value.trim();
-      const mensaje = document.getElementById('mensaje').value.trim();
-
-      if (!nombre || !correo || !mensaje) {
-        alert("Por favor completa todos los campos.");
+      if (nombre.length < 3) {
+        alert("El nombre debe tener al menos 3 caracteres.");
         e.preventDefault();
-      } else if (!/\S+@\S+\.\S+/.test(correo)) {
+      } else if (!regexCorreo.test(correo)) {
         alert("Por favor ingresa un correo válido.");
         e.preventDefault();
-      } else {
-        alert("Formulario enviado correctamente.");
+      } else if (mensaje.length < 10) {
+        alert("El mensaje debe tener al menos 10 caracteres.");
+        e.preventDefault();
       }
     });
   }
 });
 
-function setCookie(nombre, valor, dias) {
-  const fecha = new Date();
-  fecha.setTime(fecha.getTime() + (dias * 24 * 60 * 60 * 1000));
-  document.cookie = `${nombre}=${valor};expires=${fecha.toUTCString()};path=/`;
-}
+// === Validación del cuestionario ===
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("quiz-form");
+  const resultado = document.getElementById("quiz-result");
 
-// Obtener cookie
-function getCookie(nombre) {
-  const nombreEQ = `${nombre}=`;
-  const cookies = document.cookie.split(';');
-  for (let c of cookies) {
-    while (c.charAt(0) === ' ') c = c.substring(1);
-    if (c.indexOf(nombreEQ) === 0) return c.substring(nombreEQ.length, c.length);
-  }
-  return null;
-}
+  const respuestasCorrectas = {
+    q1: "b", // Ciudad de México
+    q2: "b", // 25
+    q3: "a"  // Verde
+  };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const modal = document.getElementById('cookieSeccion');
-  const aceptarBtn = document.getElementById('aceptarCookie');
-  const nombreInput = document.getElementById('nombreUsuarioInput');
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-  const nombreUsuario = getCookie("nombreUsuario");
+    let score = 0;
+    const formData = new FormData(form);
+    let preguntasSinResponder = [];
 
-  if (!nombreUsuario) {
-    // Mostrar ventana si NO existe cookie
-    modal.style.display = 'flex';
-  } else {
-    // Mostrar mensaje de bienvenida si ya hay cookie
-    mostrarMensajeBienvenida(nombreUsuario);
-  }
+    // Validar que todas las preguntas estén respondidas
+    for (let pregunta in respuestasCorrectas) {
+      const respuesta = formData.get(pregunta);
+      if (!respuesta) {
+        preguntasSinResponder.push(pregunta);
+      } else if (respuesta === respuestasCorrectas[pregunta]) {
+        score++;
+      }
+    }
 
-  // Evento de aceptar
-  aceptarBtn.addEventListener('click', () => {
-    const nombre = nombreInput.value.trim();
-    if (nombre === "") {
-      alert("Por favor ingresa tu nombre.");
+    if (preguntasSinResponder.length > 0) {
+      alert("Por favor responde todas las preguntas antes de enviar el formulario.");
       return;
     }
 
-    // Guardar cookie por 7 días
-    setCookie("nombreUsuario", nombre, 7);
-
-    // Cerrar modal
-    modal.style.display = 'none';
-
-    // Mostrar mensaje en la página
-    mostrarMensajeBienvenida(nombre);
+    // Mostrar resultado en pantalla
+    resultado.textContent = `✅ Tu puntuación es ${score}/3`;
+    resultado.style.fontWeight = "bold";
+    resultado.style.fontSize = "18px";
+    resultado.style.color = score === 3 ? "green" : "red";
   });
 });
-
-function mostrarMensajeBienvenida(nombre) {
-  const bienvenidaDiv = document.createElement('div');
-  bienvenidaDiv.innerHTML = `<p class="bienvenida">¡Hola <strong>${nombre}</strong>! Nos alegra verte de nuevo 😄</p>`;
-  bienvenidaDiv.classList.add('mensaje-bienvenida');
-
-  document.body.prepend(bienvenidaDiv);
-
-  // Desaparece después de 5 segundos
-  setTimeout(() => {
-    bienvenidaDiv.style.opacity = '0';
-    setTimeout(() => bienvenidaDiv.remove(), 500);
-  }, 5000);
-}
