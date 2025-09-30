@@ -112,7 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const respuestasCorrectas = {
     q1: "b", // Ciudad de México
     q2: "b", // 25
-    q3: "a"  // Verde
+    q3: ["a", "b", "d"], // HTML, JavaScript y CSS
+    q4: "a"  // Verde
   };
 
   form.addEventListener("submit", (e) => {
@@ -122,25 +123,63 @@ document.addEventListener("DOMContentLoaded", () => {
     const formData = new FormData(form);
     let preguntasSinResponder = [];
 
-    // Validar que todas las preguntas estén respondidas
+    // Resetear colores
+    form.querySelectorAll("p").forEach(p => {
+      p.style.color = "black";
+    });
+
+    // Validar cada pregunta
     for (let pregunta in respuestasCorrectas) {
-      const respuesta = formData.get(pregunta);
-      if (!respuesta) {
-        preguntasSinResponder.push(pregunta);
-      } else if (respuesta === respuestasCorrectas[pregunta]) {
-        score++;
+      const preguntaDiv = form.querySelector(`[name="${pregunta}"]`)?.closest("div");
+      const preguntaTexto = preguntaDiv.querySelector("p");
+
+      if (pregunta === "q3") {
+        // Manejo especial para checkbox
+        const seleccionadas = formData.getAll("q3");
+        if (seleccionadas.length === 0) {
+          preguntasSinResponder.push(pregunta);
+          continue;
+        }
+
+        // Ordenar y comparar con respuestas correctas
+        seleccionadas.sort();
+        const correctas = [...respuestasCorrectas.q3].sort();
+
+        if (JSON.stringify(seleccionadas) === JSON.stringify(correctas)) {
+          score += 25;
+          preguntaTexto.style.color = "green";
+        } else {
+          preguntaTexto.style.color = "red";
+        }
+
+      } else {
+        // Preguntas de tipo radio
+        const respuesta = formData.get(pregunta);
+
+        if (!respuesta) {
+          preguntasSinResponder.push(pregunta);
+          continue;
+        }
+
+        if (respuesta === respuestasCorrectas[pregunta]) {
+          score += 25;
+          preguntaTexto.style.color = "green";
+        } else {
+          preguntaTexto.style.color = "red";
+        }
       }
     }
 
+    // Verificar si hay preguntas sin responder
     if (preguntasSinResponder.length > 0) {
       alert("Por favor responde todas las preguntas antes de enviar el formulario.");
       return;
     }
 
-    // Mostrar resultado en pantalla
-    resultado.textContent = `✅ Tu puntuación es ${score}/3`;
+    // Mostrar resultado final
+    resultado.textContent = `✅ Tu puntuación es ${score}/100`;
     resultado.style.fontWeight = "bold";
     resultado.style.fontSize = "18px";
-    resultado.style.color = score === 3 ? "green" : "red";
+    resultado.style.color = score === 100 ? "green" : "red";
   });
 });
