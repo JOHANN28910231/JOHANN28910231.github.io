@@ -123,25 +123,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const formData = new FormData(form);
     let preguntasSinResponder = [];
 
-    // Resetear colores
+    // Resetear colores y mensajes de error
     form.querySelectorAll("p").forEach(p => {
       p.style.color = "black";
     });
+    form.querySelectorAll(".mensaje-error").forEach(span => span.remove());
 
     // Validar cada pregunta
     for (let pregunta in respuestasCorrectas) {
       const preguntaDiv = form.querySelector(`[name="${pregunta}"]`)?.closest("div");
       const preguntaTexto = preguntaDiv.querySelector("p");
 
+      // Crear contenedor de mensaje de error
+      const mensajeError = document.createElement("span");
+      mensajeError.classList.add("mensaje-error");
+      mensajeError.style.display = "block";
+      mensajeError.style.fontSize = "14px";
+      mensajeError.style.marginTop = "4px";
+      mensajeError.style.color = "red";
+
       if (pregunta === "q3") {
-        // Manejo especial para checkbox
+        // Pregunta con checkboxes
         const seleccionadas = formData.getAll("q3");
+
         if (seleccionadas.length === 0) {
           preguntasSinResponder.push(pregunta);
           continue;
         }
 
-        // Ordenar y comparar con respuestas correctas
+        // Ordenar y comparar con las correctas
         seleccionadas.sort();
         const correctas = [...respuestasCorrectas.q3].sort();
 
@@ -150,6 +160,14 @@ document.addEventListener("DOMContentLoaded", () => {
           preguntaTexto.style.color = "green";
         } else {
           preguntaTexto.style.color = "red";
+          const correctasTexto = correctas.map(op => {
+            if (op === "a") return "HTML";
+            if (op === "b") return "JavaScript";
+            if (op === "d") return "CSS";
+          }).join(", ");
+
+          mensajeError.textContent = `Respuesta incorrecta. Las opciones correctas son: ${correctasTexto}.`;
+          preguntaDiv.appendChild(mensajeError);
         }
 
       } else {
@@ -166,6 +184,19 @@ document.addEventListener("DOMContentLoaded", () => {
           preguntaTexto.style.color = "green";
         } else {
           preguntaTexto.style.color = "red";
+
+          // Texto de la respuesta correcta
+          let textoCorrecto = "";
+          if (pregunta === "q1") textoCorrecto = "Ciudad de México";
+          if (pregunta === "q2") textoCorrecto = "25";
+          if (pregunta === "q4") textoCorrecto = "Verde";
+
+          // Texto de lo que respondió
+          const opcionMarcada = form.querySelector(`[name="${pregunta}"][value="${respuesta}"]`);
+          const textoSeleccionado = opcionMarcada ? opcionMarcada.nextSibling.textContent.trim() : "Respuesta inválida";
+
+          mensajeError.textContent = `Elegiste: "${textoSeleccionado}". Respuesta correcta: "${textoCorrecto}".`;
+          preguntaDiv.appendChild(mensajeError);
         }
       }
     }
@@ -183,3 +214,4 @@ document.addEventListener("DOMContentLoaded", () => {
     resultado.style.color = score === 100 ? "green" : "red";
   });
 });
+
